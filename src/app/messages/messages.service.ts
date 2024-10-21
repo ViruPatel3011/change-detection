@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class MessagesService {
     // Setup the behaviour subject 
+    // Special naaming convention used by RxJs related variable: messages$
     messages$ = new BehaviorSubject<string[]>([]);
     private messages: string[] = [];
     get allMessages() {
@@ -14,6 +15,7 @@ export class MessagesService {
 
     addMessage(message: string) {
         this.messages = [...this.messages, message];
+        // emit new event through behaviour subject
         this.messages$.next([...this.messages]);
     }
 }
