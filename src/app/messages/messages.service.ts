@@ -1,21 +1,15 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class MessagesService {
-    // Setup the behaviour subject 
-    // Special naaming convention used by RxJs related variable: messages$
-    messages$ = new BehaviorSubject<string[]>([]);
-    private messages: string[] = [];
-    get allMessages() {
-        return [...this.messages];
-    }
+  // Setup the behaviour subject
+  // Special naaming convention used by RxJs related variable: messages$
+  private messages = signal<string[]>([]);
+  allMessages = this.messages.asReadonly();
 
-    addMessage(message: string) {
-        this.messages = [...this.messages, message];
-        // emit new event through behaviour subject
-        this.messages$.next([...this.messages]);
-    }
+  addMessage(message: string) {
+    this.messages.update((oldMessages) => [...oldMessages, message]);
+  }
 }
